@@ -14,6 +14,10 @@ export enum ExecuteCommandTypes {
     VolumeRelative = 'action.devices.commands.volumeRelative',
     OpenClose = 'action.devices.commands.OpenClose',
     LockUnlock = 'action.devices.commands.LockUnlock',
+
+    FanSpeed = 'action.devices.commands.SetFanSpeed',
+    FanSpeedRelative = 'action.devices.commands.SetFanSpeedRelativeSpeed',
+    FanReverse = 'action.devices.commands.Reverse',
 }
 
 export function getStateChanges(command: ExecuteCommandTypes, params: any, device: Device) {
@@ -74,13 +78,11 @@ export function getStateChanges(command: ExecuteCommandTypes, params: any, devic
             return { currentVolume: params.volumeLevel };
 
         case ExecuteCommandTypes.TemperatureRelative:
-            if (device.type === 'thermostat') {
-                const { thermostatTemperatureRelativeDegree, thermostatTemperatureRelativeWeight } = params;
-                const change = thermostatTemperatureRelativeDegree || (thermostatTemperatureRelativeWeight / 2);
-                return {
-                    thermostatTemperatureSetpoint: device.state + change,
-                };
-            }
+            const { thermostatTemperatureRelativeDegree, thermostatTemperatureRelativeWeight } = params;
+            const change = thermostatTemperatureRelativeDegree || (thermostatTemperatureRelativeWeight / 2);
+            return {
+                thermostatTemperatureSetpoint: device.state + change,
+            };          
             break;
 
         case ExecuteCommandTypes.VolumeRelative:
@@ -93,6 +95,27 @@ export function getStateChanges(command: ExecuteCommandTypes, params: any, devic
                 };
             }
             break;
+
+        case ExecuteCommandTypes.FanSpeed:
+            if ('fanSpeed' in params) { 
+                return { currentFanSpeedSetting: params.fanSpeed, };
+            }
+            // if ('fanSpeedPercent' in params) {
+            //     return { currentFanSpeedPercent: params.fanSpeedPercent, };
+            // }
+            break;
+
+        case ExecuteCommandTypes.FanSpeedRelative:
+            if (device.type === 'fan') {
+                const isCurrentSpeed = (element) => element.speedName == device.state.currentFanSpeedSetting;
+                const speeds = device.availableFanSpeeds
+                const currentSpeed = speeds.findIndex(isCurrentSpeed);
+                var newSpeed = currentSpeed + params.fanSpeedRelativeWeight;
+                newSpeed = Math.max(0, Math.min(speeds.length-1, newSpeed));
+                return { currentFanSpeedSetting: device.availableFanSpeeds[newSpeed], };
+
+            }
+
     }
 }
 
