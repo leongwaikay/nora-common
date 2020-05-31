@@ -1,6 +1,6 @@
 import { BaseDevice } from './device';
-import { OnOffState } from './states/onoff';
 import { FanState } from './states/fan';
+import { OnOffState } from './states/onoff';
 import { Thermostat, ThermostatMode } from './states/thermostat';
 
 export type AirconDevice = BaseDevice & {
@@ -17,6 +17,4 @@ export type AirconDevice = BaseDevice & {
     bufferRangeCelsius?: number;
     commandOnlyTemperatureSetting?: false;
     queryOnlyTemperatureSetting?: false;
-
-
-}
+};

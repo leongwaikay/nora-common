@@ -82,7 +82,7 @@ export function getStateChanges(command: ExecuteCommandTypes, params: any, devic
             const change = thermostatTemperatureRelativeDegree || (thermostatTemperatureRelativeWeight / 2);
             return {
                 thermostatTemperatureSetpoint: device.state + change,
-            };          
+            };
             break;
 
         case ExecuteCommandTypes.VolumeRelative:
@@ -97,7 +97,7 @@ export function getStateChanges(command: ExecuteCommandTypes, params: any, devic
             break;
 
         case ExecuteCommandTypes.FanSpeed:
-            if ('fanSpeed' in params) { 
+            if ('fanSpeed' in params) {
                 return { currentFanSpeedSetting: params.fanSpeed, };
             }
             // if ('fanSpeedPercent' in params) {
@@ -107,15 +107,12 @@ export function getStateChanges(command: ExecuteCommandTypes, params: any, devic
 
         case ExecuteCommandTypes.FanSpeedRelative:
             if (device.type === 'fan') {
-                const isCurrentSpeed = (element) => element.speedName == device.state.currentFanSpeedSetting;
-                const speeds = device.availableFanSpeeds
-                const currentSpeed = speeds.findIndex(isCurrentSpeed);
-                var newSpeed = currentSpeed + params.fanSpeedRelativeWeight;
-                newSpeed = Math.max(0, Math.min(speeds.length-1, newSpeed));
-                return { currentFanSpeedSetting: device.availableFanSpeeds[newSpeed], };
-
+                const speeds = device.availableFanSpeeds;
+                let newSpeed = device.state.currentFanSpeedSetting + params.fanSpeedRelativeWeight;
+                newSpeed = Math.max(0, Math.min(speeds.length - 1, newSpeed));
+                return { currentFanSpeedSetting: newSpeed, };
             }
-
+            break;
     }
 }
 
