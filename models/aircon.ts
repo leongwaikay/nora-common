@@ -7,7 +7,7 @@ export type AirconDevice = BaseDevice & {
     type: 'aircon';
     state: OnOffState & FanState & Thermostat;
 
-    availableFanSpeeds: [];
+    availableFanSpeeds: [['low']];
     reversible: false;
     supportsFanSpeedPercent: false;
     commandOnlyFanSpeed: false;
