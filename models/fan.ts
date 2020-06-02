@@ -6,7 +6,7 @@ export type FanDevice = BaseDevice & {
     type: 'fan';
     state: FanState & OnOffState;
 
-    availableFanSpeeds: [['low']];
+    availableFanSpeeds: string[][];
     reversible: false;
     supportsFanSpeedPercent: false;
     commandOnlyFanSpeed: false;
