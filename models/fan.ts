@@ -6,7 +6,15 @@ export type FanDevice = BaseDevice & {
     type: 'fan';
     state: FanState & OnOffState;
 
-    availableFanSpeeds: string[][];
+    availableFanSpeeds: {
+        'speeds': {
+            'speed_name': string,
+            'speed_values': [{
+                'speed_synonym': string[],
+                'lang': 'en'
+            }]}[],
+        'ordered': true,
+    };
     reversible: false;
     supportsFanSpeedPercent: false;
     commandOnlyFanSpeed: false;

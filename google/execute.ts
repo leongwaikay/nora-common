@@ -107,10 +107,10 @@ export function getStateChanges(command: ExecuteCommandTypes, params: any, devic
 
         case ExecuteCommandTypes.FanSpeedRelative:
             if (device.type === 'fan') {
-                const speeds = device.availableFanSpeeds;
-                let newSpeed = device.state.currentFanSpeedSetting + params.fanSpeedRelativeWeight;
+                const speeds = device.availableFanSpeeds.speeds;
+                let newSpeed = Number(device.state.currentFanSpeedSetting) + Number(params.fanSpeedRelativeWeight);
                 newSpeed = Math.max(0, Math.min(speeds.length - 1, newSpeed));
-                return { currentFanSpeedSetting: newSpeed, };
+                return { currentFanSpeedSetting: String(newSpeed) };
             }
             break;
     }
