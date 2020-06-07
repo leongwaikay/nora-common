@@ -42,6 +42,7 @@ export function getStateChanges(command: ExecuteCommandTypes, params: any, devic
         case ExecuteCommandTypes.ThermostatTemperatureSetRange:
         case ExecuteCommandTypes.ThermostatSetMode:
         case ExecuteCommandTypes.OpenClose:
+        case ExecuteCommandTypes.FanReverse:
             return params;
 
         case ExecuteCommandTypes.ColorAbsolute:
@@ -97,12 +98,9 @@ export function getStateChanges(command: ExecuteCommandTypes, params: any, devic
             break;
 
         case ExecuteCommandTypes.FanSpeed:
-            if ('fanSpeed' in params) {
-                return { currentFanSpeedSetting: params.fanSpeed, };
+            if (device.type === 'fan') {
+                return { currentFanSpeedSetting: params.fanSpeed };
             }
-            // if ('fanSpeedPercent' in params) {
-            //     return { currentFanSpeedPercent: params.fanSpeedPercent, };
-            // }
             break;
 
         case ExecuteCommandTypes.FanSpeedRelative:
